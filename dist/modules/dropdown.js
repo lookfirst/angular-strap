@@ -47,7 +47,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
         show();
         $timeout(function() {
           options.keyboard && $dropdown.$element && $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
-          bodyEl.on('click', onBodyClick);
+          if (options.autoClose) { bodyEl.on('click', onBodyClick); }
         }, 0, false);
         parentEl.hasClass('dropdown') && parentEl.addClass('open');
       };
@@ -55,13 +55,13 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
       $dropdown.hide = function() {
         if (!$dropdown.$isShown) return;
         options.keyboard && $dropdown.$element && $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
-        bodyEl.off('click', onBodyClick);
+        if (options.autoClose) { bodyEl.off('click', onBodyClick); }
         parentEl.hasClass('dropdown') && parentEl.removeClass('open');
         hide();
       };
       var destroy = $dropdown.destroy;
       $dropdown.destroy = function() {
-        bodyEl.off('click', onBodyClick);
+        if (options.autoClose) { bodyEl.off('click', onBodyClick); }
         destroy();
       };
       function onBodyClick(evt) {
@@ -91,7 +91,7 @@ angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider
       }
       return function postLink(scope, element, attr) {
         options.scope = scope;
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id', 'autoClose' ], function(key) {
           if (angular.isDefined(tAttrs[key])) options[key] = tAttrs[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
